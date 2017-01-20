@@ -7,6 +7,8 @@ require "dry-struct"
 module Types
   include Dry::Types.module
 
+  Statuses = Types::Strict::String.enum("draft", "published", "archived")
+
   class Foo < Dry::Struct
     attribute :amount, Types::Strict::Decimal
     attribute :timestamp, Types::Strict::Time
@@ -23,6 +25,7 @@ module Types
     attribute :time, Types::Strict::Time
     attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
     attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
+    attribute :status, Statuses
   end
 
   class Bar < Dry::Struct
@@ -64,6 +67,7 @@ def sample_bar
       time: Time.at(1_234_000_000),
       dates: [Date.new(2017, 1, 2), Date.new(2017, 1, 3)],
       bools: [true, false, true, false],
+      status: "draft",
     },
     lol: "astring",
   )
@@ -86,6 +90,7 @@ def sample_bar_json
       "time" => "2009-02-07T20:46:40+11:00",
       "dates" => ["2017-01-02", "2017-01-03"],
       "bools" => [true, false, true, false],
+      "status" => "draft",
     },
     "lol" => "astring",
   }

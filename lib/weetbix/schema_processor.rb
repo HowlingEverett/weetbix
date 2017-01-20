@@ -25,6 +25,8 @@ module Weetbix
           else
             dump_value(value)
           end
+        elsif dry_enum?(type)
+          process_value(value, type.type)
         else
           raise "unknown dry thing: #{type.inspect}"
         end
@@ -70,6 +72,10 @@ module Weetbix
 
     def dry_sum?(type)
       type.is_a?(Dry::Types::Sum)
+    end
+
+    def dry_enum?(type)
+      type.is_a?(Dry::Types::Enum)
     end
 
     def dry_primitive?(type)
