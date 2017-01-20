@@ -21,6 +21,8 @@ module Types
     attribute :date, Types::Strict::Date
     attribute :date_time, Types::Strict::DateTime
     attribute :time, Types::Strict::Time
+    attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
+    attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
   end
 
   class Bar < Dry::Struct
@@ -60,6 +62,8 @@ def sample_bar
       date: Date.new(2017, 1, 1),
       date_time: DateTime.new(2017, 1, 1, 3, 4, 5),
       time: Time.at(1_234_000_000),
+      dates: [Date.new(2017, 1, 2), Date.new(2017, 1, 3)],
+      bools: [true, false, true, false],
     },
     lol: "astring",
   )
@@ -80,6 +84,8 @@ def sample_bar_json
       "date" => "2017-01-01",
       "date_time" => "2017-01-01T03:04:05+00:00",
       "time" => "2009-02-07T20:46:40+11:00",
+      "dates" => ["2017-01-02", "2017-01-03"],
+      "bools" => [true, false, true, false],
     },
     "lol" => "astring",
   }

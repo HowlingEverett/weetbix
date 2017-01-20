@@ -49,7 +49,18 @@ module Weetbix
 
     def process_dry_primitive(value, type)
       primitive = type.type.primitive
-      @processors.fetch(primitive).call(value)
+      if primitive == Array
+        process_dry_array(value, type)
+      else
+        @processors.fetch(primitive).call(value)
+      end
+    end
+
+    def process_dry_array(values, type)
+      member = type.type.options.fetch(:member)
+      values.map do |value|
+        process_value(value, member)
+      end
     end
 
     def dump_value(value)
