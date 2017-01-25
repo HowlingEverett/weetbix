@@ -52,7 +52,7 @@ end
 def sample_bar
   foo = Types::Foo.new(
     amount: BigDecimal.new("5"),
-    timestamp: Time.at(1_234_000_000),
+    timestamp: Time.utc(2009),
   )
   Types::Bar.new(
     foo: foo,
@@ -64,7 +64,7 @@ def sample_bar
       bool: false,
       date: Date.new(2017, 1, 1),
       date_time: DateTime.new(2017, 1, 1, 3, 4, 5),
-      time: Time.at(1_234_000_000),
+      time: Time.utc(2009),
       dates: [Date.new(2017, 1, 2), Date.new(2017, 1, 3)],
       bools: [true, false, true, false],
       status: "draft",
@@ -77,7 +77,7 @@ def sample_bar_json
   {
     "foo" => {
       "amount" => "0.5E1",
-      "timestamp" => "2009-02-07T20:46:40+11:00",
+      "timestamp" => "2009-01-01T00:00:00Z",
     },
     "strict_types" => {
       "nil" => nil,
@@ -87,7 +87,7 @@ def sample_bar_json
       "bool" => false,
       "date" => "2017-01-01",
       "date_time" => "2017-01-01T03:04:05+00:00",
-      "time" => "2009-02-07T20:46:40+11:00",
+      "time" => "2009-01-01T00:00:00Z",
       "dates" => ["2017-01-02", "2017-01-03"],
       "bools" => [true, false, true, false],
       "status" => "draft",
