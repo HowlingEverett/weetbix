@@ -1,9 +1,9 @@
-require "weetbix/primitives"
+require "weetbix/types"
 
 module Weetbix
   class SchemaProcessor
-    def initialize(processors, key_transform)
-      @processors = processors
+    def initialize(processor, key_transform)
+      @processor = processor
       @key_transform = key_transform
     end
 
@@ -38,7 +38,7 @@ module Weetbix
 
     def dry_sum_ambiguous?(sum)
       primitives = walk_dry_sum(sum) do |type|
-        Primitives.new.json_type(type.primitive)
+        Weetbix::Types.json_type(type.primitive)
       end
 
       primitives.size != primitives.uniq.size
@@ -59,7 +59,7 @@ module Weetbix
       elsif primitive == Hash
         process_dry_hash(value, type)
       else
-        @processors.fetch(primitive).call(value)
+        process(primitive, value)
       end
     end
 
@@ -102,7 +102,11 @@ module Weetbix
 
     def dump_value(value)
       primitive = value.class
-      @processors.fetch(primitive).call(value)
+      process(primitive, value)
+    end
+
+    def process(type, value)
+      @processor.call(type, value)
     end
 
     def dry_sum?(type)
