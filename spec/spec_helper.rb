@@ -26,6 +26,7 @@ module Types
     attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
     attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
     attribute :status, Statuses
+    attribute :primitive_hash, Types::Strict::Hash
   end
 
   class Bar < Dry::Struct
@@ -68,6 +69,12 @@ def sample_bar
       dates: [Date.new(2017, 1, 2), Date.new(2017, 1, 3)],
       bools: [true, false, true, false],
       status: "draft",
+      primitive_hash: {
+        "foo" => "bar",
+        "baz" => "quux",
+        "xyzzy" => 1,
+        "plugh" => nil,
+      },
     },
     lol: "astring",
   )
@@ -91,6 +98,12 @@ def sample_bar_json
       "dates" => ["2017-01-02", "2017-01-03"],
       "bools" => [true, false, true, false],
       "status" => "draft",
+      "primitive_hash" => {
+        "foo" => "bar",
+        "baz" => "quux",
+        "xyzzy" => 1,
+        "plugh" => nil,
+      },
     },
     "lol" => "astring",
   }

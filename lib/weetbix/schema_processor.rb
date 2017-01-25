@@ -54,6 +54,8 @@ module Weetbix
       primitive = type.type.primitive
       if primitive == Array
         process_dry_array(value, type)
+      elsif primitive == Hash
+        process_dry_hash(value, type)
       else
         @processors.fetch(primitive).call(value)
       end
@@ -63,6 +65,36 @@ module Weetbix
       member = type.type.options.fetch(:member)
       values.map do |value|
         process_value(value, member)
+      end
+    end
+
+    def process_dry_hash(hash, _type)
+      assert_json_compatible_hash(hash)
+
+      hash
+    end
+
+    InvalidJSONHash = Class.new(StandardError)
+
+    def assert_json_compatible_hash(hash)
+      raise InvalidJSONHash, "non-string key" unless hash.keys.all? { |k| k.instance_of?(String) }
+
+      hash.each do |_key, value|
+        assert_json_compatible_value(value)
+      end
+    end
+
+    # XXX: a bit loose on JSON numbers
+    def assert_json_compatible_value(value)
+      case value
+      when String, Integer, Float, NilClass, TrueClass, FalseClass
+        true
+      when Hash
+        assert_json_compatible_hash(value)
+      when Array
+        value.each { |value| assert_json_compatible_value(value) }
+      else
+        raise InvalidJSONHash, value.class.name
       end
     end
 
