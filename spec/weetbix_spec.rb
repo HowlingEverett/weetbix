@@ -31,4 +31,12 @@ describe Weetbix do
       Weetbix.dump(unserializable_object)
     end.to raise_error(Weetbix::UnserializableTypeError)
   end
+
+  it "raises errors with unserializable hashes" do
+    unserializable_object = sample_unserializable_hash
+
+    expect do
+      Weetbix.dump(unserializable_object)
+    end.to raise_error(Weetbix::UnserializableTypeError)
+  end
 end

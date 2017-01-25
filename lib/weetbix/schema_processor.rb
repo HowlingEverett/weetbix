@@ -12,6 +12,8 @@ module Weetbix
         schema_type = schema.fetch(k.to_sym)
         hash[@key_transform.call(k)] = process_value(v, schema_type)
       end
+    rescue InvalidJSONHash
+      raise UnserializableTypeError
     end
 
     def process_value(value, type)

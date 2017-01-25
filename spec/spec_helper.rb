@@ -47,6 +47,11 @@ module Types
         Types::Strict::Int
       )
     end
+
+    # Not unserializable if we stick to primitives
+    class HashType < Dry::Struct
+      attribute :hash, Types::Strict::Hash
+    end
   end
 end
 
@@ -121,4 +126,8 @@ end
 
 def sample_unserializable
   Types::Unserializable::ClassType.new(klass: String)
+end
+
+def sample_unserializable_hash
+  Types::Unserializable::HashType.new(hash: {symbol_keys: "no"})
 end
