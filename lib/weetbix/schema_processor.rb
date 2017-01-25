@@ -2,14 +2,15 @@ require "weetbix/primitives"
 
 module Weetbix
   class SchemaProcessor
-    def initialize(processors)
+    def initialize(processors, key_transform)
       @processors = processors
+      @key_transform = key_transform
     end
 
     def call(values_hash, schema)
       values_hash.each_with_object({}) do |(k, v), hash|
-        schema_type = schema.fetch(k)
-        hash[k] = process_value(v, schema_type)
+        schema_type = schema.fetch(k.to_sym)
+        hash[@key_transform.call(k)] = process_value(v, schema_type)
       end
     end
 

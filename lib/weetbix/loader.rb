@@ -1,5 +1,4 @@
 require "weetbix/schema_processor"
-require "hashie"
 
 module Weetbix
   identity = -> (v) { v }
@@ -17,10 +16,10 @@ module Weetbix
   }
 
   class Loader
-    Processor = SchemaProcessor.new(LOADERS)
+    Processor = SchemaProcessor.new(LOADERS, :to_sym.to_proc)
 
     def call(graph, klass)
-      klass.new Processor.call(Hashie.symbolize_keys(graph), klass.schema)
+      klass.new Processor.call(graph, klass.schema)
     end
   end
 end

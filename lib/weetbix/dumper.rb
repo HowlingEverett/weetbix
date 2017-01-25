@@ -1,5 +1,4 @@
 require "weetbix/schema_processor"
-require "hashie"
 
 module Weetbix
   identity = -> (v) { v }
@@ -20,10 +19,10 @@ module Weetbix
   }
 
   class Dumper
-    Processor = SchemaProcessor.new(DUMPERS)
+    Processor = SchemaProcessor.new(DUMPERS, :to_s.to_proc)
 
     def call(obj)
-      Hashie.stringify_keys Processor.call(obj.to_hash, obj.class.schema)
+      Processor.call(obj.to_hash, obj.class.schema)
     rescue KeyError => e
       raise "missing dumper (#{e.message})"
     end
