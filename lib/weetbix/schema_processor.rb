@@ -16,29 +16,26 @@ module Weetbix
       raise UnserializableTypeError
     end
 
+    private
+
+    RULES = {
+      dry_struct?: :process_dry_struct,
+      dry_primitive?: :process_dry_primitive,
+      dry_sum?: :process_dry_sum,
+      dry_enum?: :process_dry_enum,
+    }
+
     def process_value(value, type)
-      if dry_struct?(type)
-        call(value, type.schema)
-      else
-        if dry_primitive?(type)
-          process_dry_primitive(value, type)
-        elsif dry_sum?(type)
-          if dry_sum_ambiguous?(type)
-            raise Weetbix::AmbiguousTypeError, "can't dump ambiguous #{type.inspect}"
-          else
-            dump_value(value)
-          end
-        elsif dry_enum?(type)
-          process_value(value, type.type)
-        else
-          raise "unknown dry thing: #{type.inspect}"
-        end
+      RULES.each do |predicate, action|
+        return send(action, value, type) if send(predicate, type)
       end
+
+      raise "unknown dry thing: #{type.inspect}"
     end
 
     def dry_sum_ambiguous?(sum)
       primitives = walk_dry_sum(sum) do |type|
-        Weetbix::Types.json_type(type.primitive)
+        Types.json_type(type.primitive)
       end
 
       primitives.size != primitives.uniq.size
@@ -52,6 +49,10 @@ module Weetbix
       end
     end
 
+    def process_dry_struct(value, type)
+      call(value, type.schema)
+    end
+
     def process_dry_primitive(value, type)
       primitive = type.type.primitive
       if primitive == Array
@@ -59,8 +60,20 @@ module Weetbix
       elsif primitive == Hash
         process_dry_hash(value, type)
       else
-        process(primitive, value)
+        serialize_primitive(primitive, value)
       end
+    end
+
+    def process_dry_sum(value, type)
+      if dry_sum_ambiguous?(type)
+        raise AmbiguousTypeError, "can't dump ambiguous #{type.inspect}"
+      end
+
+      serialize_primitive(value.class, value)
+    end
+
+    def process_dry_enum(value, type)
+      process_value(value, type.type)
     end
 
     def process_dry_array(values, type)
@@ -79,33 +92,30 @@ module Weetbix
     InvalidJSONHash = Class.new(StandardError)
 
     def assert_json_compatible_hash(hash)
-      raise InvalidJSONHash, "non-string key" unless hash.keys.all? { |k| k.instance_of?(String) }
+      unless hash.keys.all? { |k| k.instance_of?(String) }
+        raise InvalidJSONHash, "non-string key"
+      end
 
       hash.each do |_key, value|
         assert_json_compatible_value(value)
       end
     end
 
-    # XXX: a bit loose on JSON numbers
     def assert_json_compatible_value(value)
       case value
+      # NOTE: JSON numbers can technically include very big integers
       when String, Integer, Float, NilClass, TrueClass, FalseClass
         true
       when Hash
         assert_json_compatible_hash(value)
       when Array
-        value.each { |value| assert_json_compatible_value(value) }
+        value.each { |obj| assert_json_compatible_value(obj) }
       else
         raise InvalidJSONHash, value.class.name
       end
     end
 
-    def dump_value(value)
-      primitive = value.class
-      process(primitive, value)
-    end
-
-    def process(type, value)
+    def serialize_primitive(type, value)
       @processor.call(type, value)
     end
 
