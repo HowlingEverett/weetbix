@@ -1,4 +1,5 @@
 require "weetbix/types"
+require "weetbix/dry_predicates"
 
 module Weetbix
   class SchemaProcessor
@@ -27,7 +28,7 @@ module Weetbix
 
     def process_value(value, type)
       RULES.each do |predicate, action|
-        return send(action, value, type) if send(predicate, type)
+        return send(action, value, type) if DryPredicates.send(predicate, type)
       end
 
       raise "unknown dry thing: #{type.inspect}"
@@ -42,7 +43,7 @@ module Weetbix
     end
 
     def walk_dry_sum(obj, &block)
-      if dry_sum?(obj)
+      if DryPredicates.dry_sum?(obj)
         walk_dry_sum(obj.left, &block) + walk_dry_sum(obj.right, &block)
       else
         [yield(obj)]
@@ -117,22 +118,6 @@ module Weetbix
 
     def serialize_primitive(type, value)
       @processor.call(type, value)
-    end
-
-    def dry_sum?(type)
-      type.is_a?(Dry::Types::Sum)
-    end
-
-    def dry_enum?(type)
-      type.is_a?(Dry::Types::Enum)
-    end
-
-    def dry_primitive?(type)
-      type.is_a?(Dry::Types::Constrained)
-    end
-
-    def dry_struct?(type)
-      type.respond_to?(:ancestors) && type.ancestors.include?(Dry::Struct)
     end
   end
 end
