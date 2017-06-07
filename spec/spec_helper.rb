@@ -23,6 +23,8 @@ module Types
     attribute :date, Types::Strict::Date
     attribute :date_time, Types::Strict::DateTime
     attribute :time, Types::Strict::Time
+    attribute :maybe_string, Types::Strict::String.optional
+    attribute :maybe_not_string, Types::Strict::String.optional
     attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
     attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
     attribute :status, Statuses
@@ -71,6 +73,8 @@ def sample_bar
       date: Date.new(2017, 1, 1),
       date_time: DateTime.new(2017, 1, 1, 3, 4, 5),
       time: Time.utc(2009),
+      maybe_string: "maybe",
+      maybe_not_string: nil,
       dates: [Date.new(2017, 1, 2), Date.new(2017, 1, 3)],
       bools: [true, false, true, false],
       status: "draft",
@@ -100,6 +104,8 @@ def sample_bar_json
       "date" => "2017-01-01",
       "date_time" => "2017-01-01T03:04:05+00:00",
       "time" => "2009-01-01T00:00:00Z",
+      "maybe_string" => "maybe",
+      "maybe_not_string" => nil,
       "dates" => ["2017-01-02", "2017-01-03"],
       "bools" => [true, false, true, false],
       "status" => "draft",
