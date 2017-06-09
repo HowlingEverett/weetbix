@@ -1,7 +1,4 @@
 require "weetbix/version"
-require "bigdecimal"
-require "time"
-require "date"
 
 require "weetbix/dumper"
 require "weetbix/loader"
@@ -23,13 +20,7 @@ module Weetbix
   end
 
   module_function def serializer(mod, prefix)
-    JsonSerializer.new(
-      Namespace.new(
-        Serializer.new,
-        mod,
-        prefix,
-      ),
-    )
+    JsonSerializer.new(namespaced(mod, prefix))
   end
 
   module_function def dump(obj)

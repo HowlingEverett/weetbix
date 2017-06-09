@@ -2,8 +2,6 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "weetbix"
 
-require "dry-struct"
-
 module Types
   include Dry::Types.module
 

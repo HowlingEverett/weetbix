@@ -1,3 +1,7 @@
+require "bigdecimal"
+require "time"
+require "date"
+
 module Weetbix
   module Types
     Type = Struct.new(:type, :to, :dump, :load)

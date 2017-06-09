@@ -1,16 +1,20 @@
 require "spec_helper"
 
-describe Weetbix do
-  it "should round trip via dry-thingy with jsonld @type" do
-    bar = sample_bar
+require "weetbix"
 
-    ns = Weetbix.namespaced(Types, "urn:everydayhero:types:")
+module Weetbix
+  describe Namespace do
+    subject { Weetbix.namespaced(::Types, "urn:everydayhero:types:") }
 
-    expected_json = sample_bar_json_with_type("urn:everydayhero:types:Bar")
+    it "should round trip via #dump/#load with json-ld @type" do
+      bar = sample_bar
 
-    json = ns.dump(bar)
-    expect(json).to eq expected_json
-    obj = ns.load(json)
-    expect(obj).to eq bar
+      expected_json = sample_bar_json_with_type("urn:everydayhero:types:Bar")
+
+      json = subject.dump(bar)
+      expect(json).to eq expected_json
+      obj = subject.load(json)
+      expect(obj).to eq bar
+    end
   end
 end

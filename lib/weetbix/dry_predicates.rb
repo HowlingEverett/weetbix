@@ -1,3 +1,5 @@
+require "dry-struct"
+
 module Weetbix
   module DryPredicates
     module_function def dry_sum?(type)
