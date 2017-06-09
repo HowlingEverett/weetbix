@@ -90,7 +90,7 @@ end
 def sample_bar_json
   {
     "foo" => {
-      "amount" => "0.5E1",
+      "amount" => "5.0",
       "timestamp" => "2009-01-01T00:00:00Z",
     },
     "strict_types" => {
