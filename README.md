@@ -1,5 +1,7 @@
 # Weetbix
 
+[![Build Status](https://travis-ci.org/JonathonMA/weetbix.svg?branch=master)](https://travis-ci.org/JonathonMA/weetbix)
+
 Serialize dry-structs to json and back again.
 
 ## Installation
