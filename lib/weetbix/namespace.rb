@@ -14,7 +14,8 @@ module Weetbix
     end
 
     def load(graph)
-      type = graph.delete("@type")
+      type = graph.fetch("@type")
+      graph = graph.reject { |k, _| k == "@type" }
       @serializer.load(graph, load_class(type))
     end
 

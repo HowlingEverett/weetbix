@@ -12,6 +12,8 @@ module Weetbix
       expected_json = sample_bar_json_with_type("urn:everydayhero:types:Bar")
 
       json = subject.dump(bar)
+      json.freeze
+
       expect(json).to eq expected_json
       obj = subject.load(json)
       expect(obj).to eq bar
