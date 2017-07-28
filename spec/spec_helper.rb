@@ -32,7 +32,7 @@ module Types
   class Bar < Dry::Struct
     attribute :foo, Foo
     attribute :maybe_foo, Foo.optional
-    attribute :strict_types, StrictTypes
+    attribute :strict_types, StrictTypes.optional
     attribute :lol, Types::Strict::String
   end
 

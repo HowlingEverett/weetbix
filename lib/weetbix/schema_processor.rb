@@ -70,7 +70,7 @@ module Weetbix
         raise AmbiguousTypeError, "can't dump ambiguous #{type.inspect}"
       end
 
-      serialize_primitive(ruby_type_of(value, type), value)
+      process_value(value, ruby_type_of(value, type))
     end
 
     # TODO: this isn't necessary when serializing, because we can just dump via
@@ -89,7 +89,7 @@ module Weetbix
 
       walk_dry_sum(dry_sum_type) do |type|
         if json_type_of_value == Types.json_type(type.primitive)
-          return type.primitive
+          return type
         end
       end
     end
