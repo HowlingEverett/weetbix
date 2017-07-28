@@ -14,19 +14,19 @@ module Types
 
   class StrictTypes < Dry::Struct
     attribute :nil, Types::Strict::Nil
-    attribute :symbol, Types::Strict::Symbol
-    attribute :true, Types::Strict::True
-    attribute :false, Types::Strict::False
-    attribute :bool, Types::Strict::Bool
-    attribute :date, Types::Strict::Date
-    attribute :date_time, Types::Strict::DateTime
-    attribute :time, Types::Strict::Time
+    attribute :symbol, Types::Strict::Symbol.optional
+    attribute :true, Types::Strict::True.optional
+    attribute :false, Types::Strict::False.optional
+    attribute :bool, Types::Strict::Bool.optional
+    attribute :date, Types::Strict::Date.optional
+    attribute :date_time, Types::Strict::DateTime.optional
+    attribute :time, Types::Strict::Time.optional
     attribute :maybe_string, Types::Strict::String.optional
     attribute :maybe_not_string, Types::Strict::String.optional
     attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
     attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
     attribute :status, Statuses
-    attribute :primitive_hash, Types::Strict::Hash
+    attribute :primitive_hash, Types::Strict::Hash.optional
   end
 
   class Bar < Dry::Struct
