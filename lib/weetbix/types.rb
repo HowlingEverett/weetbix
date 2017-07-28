@@ -46,6 +46,8 @@ module Weetbix
     primitive Integer, to: :number
     primitive Float, to: :number
 
+    primitive Hash, to: :hash
+
     serialize BigDecimal,
               to: :string,
               dump: ->(num) { num.to_s("F") },

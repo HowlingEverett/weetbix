@@ -70,7 +70,28 @@ module Weetbix
         raise AmbiguousTypeError, "can't dump ambiguous #{type.inspect}"
       end
 
-      serialize_primitive(value.class, value)
+      serialize_primitive(ruby_type_of(value, type), value)
+    end
+
+    # TODO: this isn't necessary when serializing, because we can just dump via
+    # the value's class, but when deserializing, we need to know that a symbol
+    # should use the symbol deserializer
+    #
+    # we can determine the actual type to de(serialize) as by matching to the
+    # expected serialization vs the actual type we have
+    #
+    # e.g. both String and Symbol serialize to :string, so we can walk the sum
+    # type until we find the type that serializes to :string and that's the
+    # serializer we need to use we'll already have asserted that the sum type is
+    # unambiguous at this point, so this is safe
+    def ruby_type_of(value, dry_sum_type)
+      json_type_of_value = Types.json_type(value.class)
+
+      walk_dry_sum(dry_sum_type) do |type|
+        if json_type_of_value == Types.json_type(type.primitive)
+          return type.primitive
+        end
+      end
     end
 
     def process_dry_enum(value, type)
