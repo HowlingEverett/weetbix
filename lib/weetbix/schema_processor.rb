@@ -24,6 +24,7 @@ module Weetbix
       dry_primitive?: :process_dry_primitive,
       dry_sum?: :process_dry_sum,
       dry_enum?: :process_dry_enum,
+      dry_default?: :process_dry_default,
     }
 
     def process_value(value, type)
@@ -71,6 +72,10 @@ module Weetbix
       end
 
       process_value(value, ruby_type_of(value, type))
+    end
+
+    def process_dry_default(value, type)
+      process_value(value, type.type)
     end
 
     # TODO: this isn't necessary when serializing, because we can just dump via

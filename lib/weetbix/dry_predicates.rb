@@ -6,6 +6,10 @@ module Weetbix
       type.is_a?(Dry::Types::Sum)
     end
 
+    module_function def dry_default?(type)
+      type.is_a?(Dry::Types::Default)
+    end
+
     module_function def dry_enum?(type)
       type.is_a?(Dry::Types::Enum)
     end
