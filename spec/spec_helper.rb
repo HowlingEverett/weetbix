@@ -31,6 +31,7 @@ module Types
 
   class Bar < Dry::Struct
     attribute :foo, Foo
+    attribute :maybe_foo, Foo.optional
     attribute :strict_types, StrictTypes
     attribute :lol, Types::Strict::String
   end
@@ -62,6 +63,7 @@ def sample_bar
   )
   Types::Bar.new(
     foo: foo,
+    maybe_foo: nil,
     strict_types: {
       nil: nil,
       symbol: :symbol,
@@ -93,6 +95,7 @@ def sample_bar_json
       "amount" => "5.0",
       "timestamp" => "2009-01-01T00:00:00Z",
     },
+    "maybe_foo" => nil,
     "strict_types" => {
       "nil" => nil,
       "symbol" => "symbol",

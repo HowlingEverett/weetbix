@@ -23,7 +23,11 @@ module Weetbix
     end
 
     def self.json_type(type)
-      @types.fetch(type).to
+      if DryPredicates.dry_struct?(type)
+        :hash
+      else
+        @types.fetch(type).to
+      end
     end
 
     def self.dump(type, value)
