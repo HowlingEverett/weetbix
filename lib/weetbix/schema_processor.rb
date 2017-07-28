@@ -93,9 +93,7 @@ module Weetbix
       json_type_of_value = Types.json_type(value.class)
 
       walk_dry_sum(dry_sum_type) do |type|
-        if json_type_of_value == Types.json_type(type.primitive)
-          return type
-        end
+        return type if json_type_of_value == Types.json_type(type.primitive)
       end
     end
 
