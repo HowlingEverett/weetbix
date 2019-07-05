@@ -58,7 +58,7 @@ end
 
 def sample_bar
   foo = Types::Foo.new(
-    amount: BigDecimal.new("5"),
+    amount: BigDecimal("5"),
     timestamp: Time.utc(2009),
   )
   Types::Bar.new(
