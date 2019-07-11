@@ -3,7 +3,7 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "weetbix"
 
 module Types
-  include Dry::Types.module
+  include Dry.Types()
 
   Statuses = Types::Strict::String.enum("draft", "published", "archived")
 
@@ -23,8 +23,8 @@ module Types
     attribute :time, Types::Strict::Time.optional.default(nil)
     attribute :maybe_string, Types::Strict::String.optional.default(nil)
     attribute :maybe_not_string, Types::Strict::String.optional.default(nil)
-    attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
-    attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
+    attribute :dates, Types::Strict::Array.of(Types::Strict::Date)
+    attribute :bools, Types::Strict::Array.of(Types::Strict::Bool)
     attribute :status, Statuses
     attribute :primitive_hash, Types::Strict::Hash.optional.default(nil)
   end
@@ -45,7 +45,7 @@ module Types
       attribute :ambiguous, (
         Types::Strict::String |
         Types::Strict::Symbol |
-        Types::Strict::Int
+        Types::Strict::Integer
       )
     end
 
