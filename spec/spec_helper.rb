@@ -45,7 +45,7 @@ module Types
       attribute :ambiguous, (
         Types::Strict::String |
         Types::Strict::Symbol |
-        Types::Strict::Int
+        Types::Strict::Integer
       )
     end
 
