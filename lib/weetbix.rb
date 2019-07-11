@@ -19,19 +19,21 @@ module Weetbix
     end
   end
 
-  module_function def serializer(mod, prefix)
+  module_function
+
+  def serializer(mod, prefix)
     JsonSerializer.new(namespaced(mod, prefix))
   end
 
-  module_function def dump(obj)
+  def dump(obj)
     Serializer.new.dump(obj)
   end
 
-  module_function def load(obj, klass)
+  def load(obj, klass)
     Serializer.new.load(obj, klass)
   end
 
-  module_function def namespaced(mod, prefix)
+  def namespaced(mod, prefix)
     Namespace.new(Serializer.new, mod, prefix)
   end
 end

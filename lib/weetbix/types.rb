@@ -13,12 +13,12 @@ module Weetbix
     end
 
     def self.primitive(type, to:)
-      identity = -> (v) { v }
+      identity = ->(v) { v }
       serialize type, to: to, dump: identity, load: identity
     end
 
     def self.unserializable(type)
-      unserializable = -> (v) { raise UnserializableTypeError, v.class.name }
+      unserializable = ->(v) { raise UnserializableTypeError, v.class.name }
       serialize type, to: :null, dump: unserializable, load: unserializable
     end
 
@@ -40,8 +40,8 @@ module Weetbix
 
     primitive String, to: :string
     primitive NilClass, to: :null
-    primitive FalseClass, to: :false
-    primitive TrueClass, to: :true
+    primitive FalseClass, to: :false # rubocop:disable Lint/BooleanSymbol
+    primitive TrueClass, to: :true # rubocop:disable Lint/BooleanSymbol
 
     primitive Integer, to: :number
     primitive Float, to: :number
