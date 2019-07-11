@@ -51,7 +51,7 @@ module Weetbix
     serialize BigDecimal,
               to: :string,
               dump: ->(num) { num.to_s("F") },
-              load: BigDecimal.method(:new)
+              load: Kernel.method(:BigDecimal)
     serialize Time,
               to: :string,
               dump: :xmlschema.to_proc,
