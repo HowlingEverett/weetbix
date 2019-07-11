@@ -10,7 +10,9 @@ module Weetbix
 
     def call(values_hash, schema)
       values_hash.each_with_object({}) do |(k, v), hash|
-        schema_type = schema.fetch(k.to_sym)
+        schema_key = schema.keys.find { |key| key.name == k.to_sym }
+        schema_type = schema_key.type
+
         hash[@key_transform.call(k)] = process_value(v, schema_type)
       end
     rescue InvalidJSONHash
