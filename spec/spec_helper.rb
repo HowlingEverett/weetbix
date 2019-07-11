@@ -3,7 +3,7 @@ $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "weetbix"
 
 module Types
-  include Dry::Types.module
+  include Dry.Types()
 
   Statuses = Types::Strict::String.enum("draft", "published", "archived")
 
