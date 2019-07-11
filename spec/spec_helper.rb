@@ -1,5 +1,4 @@
-# rubocop:disable Metrics/MethodLength
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "weetbix"
 
 module Types
@@ -15,8 +14,10 @@ module Types
   class StrictTypes < Dry::Struct
     attribute :nil, Types::Strict::Nil
     attribute :symbol, Types::Strict::Symbol.optional.default(nil)
+    # rubocop:disable Lint/BooleanSymbol
     attribute :true, Types::Strict::True.optional.default(nil)
     attribute :false, Types::Strict::False.optional.default(nil)
+    # rubocop:enable Lint/BooleanSymbol
     attribute :bool, Types::Strict::Bool.optional.default(nil)
     attribute :date, Types::Strict::Date.optional.default(nil)
     attribute :date_time, Types::Strict::DateTime.optional.default(nil)
@@ -58,7 +59,7 @@ end
 
 def sample_bar
   foo = Types::Foo.new(
-    amount: BigDecimal.new("5"),
+    amount: BigDecimal("5"),
     timestamp: Time.utc(2009),
   )
   Types::Bar.new(
@@ -67,8 +68,8 @@ def sample_bar
     strict_types: {
       nil: nil,
       symbol: :symbol,
-      true: true,
-      false: false,
+      true: true, # rubocop:disable Lint/BooleanSymbol
+      false: false, # rubocop:disable Lint/BooleanSymbol
       bool: false,
       date: Date.new(2017, 1, 1),
       date_time: DateTime.new(2017, 1, 1, 3, 4, 5),

@@ -1,11 +1,45 @@
-inherit_from:
-- https://everydayhero.github.io/styleguide/rubocop.yml
-
 AllCops:
-  TargetRubyVersion: 2.3
+  TargetRubyVersion: 2.4
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Metrics/BlockLength:
+  Max: 150
 
 Metrics/ClassLength:
   Max: 150
+
+Metrics/MethodLength:
+  Max: 30
+
+Metrics/LineLength:
+  Exclude:
+    - '**/*.gemspec'
+
+Style/Documentation:
+  Enabled: false
+
+Style/MutableConstant:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
