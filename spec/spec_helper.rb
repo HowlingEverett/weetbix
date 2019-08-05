@@ -1,9 +1,8 @@
-# rubocop:disable Metrics/MethodLength
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "weetbix"
 
 module Types
-  include Dry::Types.module
+  include Dry.Types()
 
   Statuses = Types::Strict::String.enum("draft", "published", "archived")
 
@@ -15,16 +14,18 @@ module Types
   class StrictTypes < Dry::Struct
     attribute :nil, Types::Strict::Nil
     attribute :symbol, Types::Strict::Symbol.optional.default(nil)
+    # rubocop:disable Lint/BooleanSymbol
     attribute :true, Types::Strict::True.optional.default(nil)
     attribute :false, Types::Strict::False.optional.default(nil)
+    # rubocop:enable Lint/BooleanSymbol
     attribute :bool, Types::Strict::Bool.optional.default(nil)
     attribute :date, Types::Strict::Date.optional.default(nil)
     attribute :date_time, Types::Strict::DateTime.optional.default(nil)
     attribute :time, Types::Strict::Time.optional.default(nil)
     attribute :maybe_string, Types::Strict::String.optional.default(nil)
     attribute :maybe_not_string, Types::Strict::String.optional.default(nil)
-    attribute :dates, Types::Strict::Array.member(Types::Strict::Date)
-    attribute :bools, Types::Strict::Array.member(Types::Strict::Bool)
+    attribute :dates, Types::Strict::Array.of(Types::Strict::Date)
+    attribute :bools, Types::Strict::Array.of(Types::Strict::Bool)
     attribute :status, Statuses
     attribute :primitive_hash, Types::Strict::Hash.optional.default(nil)
   end
@@ -45,7 +46,7 @@ module Types
       attribute :ambiguous, (
         Types::Strict::String |
         Types::Strict::Symbol |
-        Types::Strict::Int
+        Types::Strict::Integer
       )
     end
 
@@ -67,8 +68,8 @@ def sample_bar
     strict_types: {
       nil: nil,
       symbol: :symbol,
-      true: true,
-      false: false,
+      true: true, # rubocop:disable Lint/BooleanSymbol
+      false: false, # rubocop:disable Lint/BooleanSymbol
       bool: false,
       date: Date.new(2017, 1, 1),
       date_time: DateTime.new(2017, 1, 1, 3, 4, 5),
